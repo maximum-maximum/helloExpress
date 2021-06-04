@@ -11,12 +11,15 @@
 </head>
 
 <body class="container">
-
   <header>
     <h1 class="display-4"><%=title %></h1>
   </header>
   <div role="main">
     <p><%=content %></p>
+    <form method="post" action="/other">
+      <input type="text" name="msg" class="form-control">
+      <input type="submit" value="Click" class="btn btn-primary">
+    </form>
   </div>
 </body>
 
