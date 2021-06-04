@@ -42,27 +42,42 @@ function getFromClient(request, response) {
   }
 }
 
-// 追加するデータ用変数
-var data2 = {
-  'Taro': ['taro@yamada', '09-999-999', 'Tokyo'],
-  'Hanako': ['hanako@flower', '080-888-888', 'Yokohama'],
-  'Sachiko': ['sachi@happy', '070-777-777', 'Nagoya'],
-  'Ichiro': ['ichi@baseball', '060-666-666', 'USA'],
-}
+var data = { msg: 'no message...' };
   
-  // indexのアクセス処理
-  function response_index(request, response) {
-    var msg = "これはIndexページです。"
-    var content = ejs.render(index_page, {
-      title: "Index",
-      content: msg,
-      data: data2,
-      filename: 'data_item' //☆追記
+// indexのアクセス処理
+function response_index(request, response) {
+  // POSTアクセス時の処理
+  if (request.method == 'POST') {
+    var body = '';
+
+    // データ受信のイベント処理
+    request.on('data', (data) => {
+      body += data;
     });
-    response.writeHead(200, { 'Content-Type': 'text/html' });
-    response.write(content);
-    response.end();
+
+    // データ受信終了のイベント処理
+    request.on('end', () => {
+      data = qs.parse(body); // ★データのパース
+      write_index(request, response);
+    });
+  } else {
+    write_index(request, response);
   }
+}
+
+// indexの表示の作成
+function write_index(request, response) {
+  var msg = "※伝言を表示します。"
+  var content = ejs.render(index_page, {
+    title: "Index",
+    content: msg,
+    data: data,
+  });
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write(content);
+  response.end();
+}
+
 
 // ★otherのアクセス処理
 function response_other(request, response) {
