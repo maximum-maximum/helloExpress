@@ -21,7 +21,7 @@ router.get('/',(req, res, next) => {
           title: 'Hello!',
           content: rows
         };
-        res.render('hello', data);        
+        res.render('hello/index', data);        
       }
     }); 
   });
