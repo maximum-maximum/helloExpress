@@ -7,14 +7,23 @@
     <link rel="stylesheet" 
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
     crossorigin="anonymous">
-    <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body class="container">
     <header>
-        <h1><%= title %></h1>
+      <h1 class="display-4">
+        <%= title %></h1>
     </header>
     <div role="main">
-        <p><%- content %></p>
+      <p class="h6"><%- content %></p>
+      <form method="post" action="/hello/post">
+        <div class="form-group">
+          <label for="msg">Message:</label>
+          <input type="text" name="message" id="msg" 
+            class="form-control">
+        </div>
+        <input type="submit" value="送信" 
+          class="btn btn-primary">
+      </form>
     </div>
   </body>
 </html>
