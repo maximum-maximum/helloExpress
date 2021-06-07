@@ -1,26 +1,27 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-  var msg = '※何か書いて送信して下さい。';
-  if (req.session.message != undefined) {
-    msg = "Last Message: " + req.session.message;
-  }
-  var data = {
-    title: 'Hello!',
-    content: msg
-  };
-  res.render('hello', data);
-});
+const sqlite3 = require('sqlite3'); // 追加
 
-router.post('/post', (req, res, next) => {
-  var msg = req.body['message'];
-  req.session.message = msg;
-  var data = {
-    title: 'Hello!',
-    content: "Last Message: " + req.session.message
-  };
-  res.render('hello', data);
+// データベースオブジェクトの取得
+const db = new sqlite3.Database('mydb.sqlite3');
+
+// GETアクセスの処理
+router.get('/',(req, res, next) => {
+  // データベースのシリアライズ
+  db.serialize(() => {
+    //レコードをすべて取り出す
+    db.all("select * from mydata",(err, rows) => {
+      // データベースアクセス完了時の処理
+      if (!err) {
+        var data = {
+          title: 'Hello!',
+          content: rows // 取得したレコードデータ
+        };
+        res.render('hello', data);
+      }   
+    }); 
+  }); 
 });
 
 module.exports = router;
